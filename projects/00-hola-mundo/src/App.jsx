@@ -20,7 +20,7 @@ export function App () {
                 userName="XXXXXXX"
                 initialIsFollowing ={false}
             >
-                Miguel Angel Duran
+                Carlos David Ballesteros Torres
             </TwitterFollowCard>    
         </section>    
     )
