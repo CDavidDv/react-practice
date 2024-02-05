@@ -7,8 +7,15 @@ import { WinnerModal } from './components/Winner.jsx'
 import { checkEndGame } from './logic/board.js'
 
 function App() {
-  const [board, setBoard]  = useState(Array(9).fill(null))
-  const [turn, setTurn] = useState(TURNS.X)
+  const [board, setBoard]  = useState(() =>{
+    const boardFromStorage = window.localStorage.getItem('board')
+    if(boardFromStorage) return JSON.parse(boardFromStorage)
+    return Array(9).fill(null)
+  })
+  const [turn, setTurn] = useState(() =>{
+    const turnFromStorage = window.localStorage.getItem('turn')
+    return turnFromStorage ?? TURNS.X
+  })
   const [winner, setWinner] = useState(null)  
 
   
@@ -22,6 +29,11 @@ function App() {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
 
+    //guardar en local storage 
+    window.localStorage.setItem('board', JSON.stringify(newBoard))
+    window.localStorage.setItem('turn', newTurn)
+
+    //check winner
     const newWinner = checkWinnerFrom(newBoard)
     if(newWinner) {
       confetti()
@@ -35,6 +47,9 @@ function App() {
     setBoard(Array(9).fill(null))
     setTurn(TURNS.X)
     setWinner(null)
+
+    window.localStorage.removeItem('board')
+    window.localStorage.removeItem('turn')
   }
   return (
     <>
