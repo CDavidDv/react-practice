@@ -10,8 +10,8 @@ function App() {
 
   return (
     <>
-     <h3>Proyecto 3</h3>
-     <button onClick={() => setEnable(!enable)}>{enable ?  'Desactivar' : 'Activar'} seguir puntero</button>
+      <h3>Proyecto 3</h3>
+      <button onClick={() => setEnable(!enable)}>{enable ?  'Desactivar' : 'Activar'} seguir puntero</button>
     </>
   )
 }
