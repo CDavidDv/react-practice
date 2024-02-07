@@ -4,16 +4,34 @@ import  confetti  from 'canvas-confetti';
 export function Tablero() {
     
     const [board, setBoard] = useState(() => {
+        const boardFromStorage = window.localStorage.getItem('board')
+        if(boardFromStorage) return JSON.parse(boardFromStorage)
         return  Array(7).fill().map(() => Array(6).fill(null));
-        
     });
 
-    const [turn, setTurn] = useState('Y');
+    const [turn, setTurn] = useState(() =>{
+        
+        const turnFromStorage = window.localStorage.getItem('turn')
+        return turnFromStorage ?? 'Y'
+    }
+    );
 
-    const [winner, setWinner] = useState(-1);
+    const [winner, setWinner] = useState(() => {
+            const winnerFromStorage = window.localStorage.getItem('winner')
+            return winnerFromStorage ?? -1 
+        }
+    );
 
-    const handleSetTurn = (newTurn) => {
-        turn === newTurn;
+    const handleSetWinner = (winner) => {
+        setWinner(winner)
+        window.localStorage.setItem('winner', winner)
+    
+    }
+
+    const handleSetTurn = (turn) => {
+        const newTurn = turn === 'Y' ? 'R' : 'Y'
+        setTurn(newTurn)
+        window.localStorage.setItem('turn', newTurn)
     }
 
     const combosGanadores = [
@@ -91,7 +109,7 @@ export function Tablero() {
     const resetGame = () => {
         setBoard(Array(7).fill().map(() => Array(6).fill(null)));
         setTurn('Y');
-        setWinner(-1)
+        handleSetWinner(-1)
         window.localStorage.removeItem('board')
         window.localStorage.removeItem('turn')
         
@@ -101,21 +119,10 @@ export function Tablero() {
 
         if(winner === 1) return
         
-        
-        
         const newBoard = board.map(row => [...row]);
 
         if (newBoard[x].every(cell => cell !== null))  return
 
-        const newTurn = turn === 'Y' ? setTurn('R') : setTurn('Y');
-
-        // window.localStorage.setItem('board', JSON.stringify(newBoard))
-
-        
-        
-        
-        
-        
         for (let i = 0; i <= board[0].length ; i++) {
             
             if (newBoard[x][i] === null) {
@@ -127,7 +134,7 @@ export function Tablero() {
                         cell => newBoard[cell[0]][cell[1]] === jugador));
 
                 if (ganador) {
-                    setWinner(1);
+                    handleSetWinner(1);
                     confetti();
                 }
 
@@ -138,15 +145,15 @@ export function Tablero() {
         
         
         setBoard(newBoard);
-        handleSetTurn(newTurn)
+        handleSetTurn(turn)
 
         if (newBoard.every(row => row.every(cell => cell !== null))){
-            console.log("se lleno")
-            setWinner(0);
+            handleSetWinner(0);
             return;
         }
         
-        window.localStorage.setItem('turn', newTurn)
+        
+        window.localStorage.setItem('board', JSON.stringify(newBoard))
     }
 
     return (
@@ -171,10 +178,10 @@ export function Tablero() {
           </section>) : null }
             
             <h1 className='text-4xl font-bold text-slate-100 my-8 text-center '>Connect 4</h1>
-            <span className="flex gap-1 place-content-center py-3 font-semibold  "> Turno  de {turn === 'Y' ? <div className="h-6 w-6 rounded-full bg-yellow-300"></div> : <div className="bg-red-500 h-5 w-5 rounded-full"></div> } 
+            <span className="flex gap-1 place-content-center py-3 font-semibold  "> Turno  de {turn === 'Y' ? (<div className="p-1 bg-white"><div className="h-6 w-6 rounded-full bg-yellow-300"></div></div>) : <div className="bg-red-500 h-5 w-5 rounded-full"></div> } 
                 <button onClick={resetGame} className="py-1 px-2 bg-blue-700 rounded-md hover:bg-blue-600">Reiniciar</button>
             </span>
-            <div className="grid grid-cols-7 bg-blue-500 border-[8px] border-t-0 border-solid border-x-blue-500 border-b-blue-500">
+            <section className="grid grid-cols-7 bg-blue-500 border-[8px] border-t-0 border-solid border-x-blue-500 border-b-blue-500">
                 {board.map((column, x) => (
                     <div key={x} onClick={() => handleChangeBoard(x)} className=" bg-blue-700 h-full w-full flex flex-col-reverse p-2 gap-2">
                         {column.map((cell, y) => (
@@ -186,7 +193,7 @@ export function Tablero() {
                         ))}
                     </div>
                 ))}
-            </div>
+            </section>
         </div>
     );
 }
