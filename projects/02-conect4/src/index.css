@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root{
+    margin: 0;
+    display: grid;
+    place-content: center;
+    background: #3a3a3a;
+    color: aliceblue;
+    font-family: system-ui, -apple-system, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
