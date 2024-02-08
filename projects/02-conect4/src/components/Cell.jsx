@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 
 export function Cell({ cell, x, y }) {
     
@@ -9,5 +10,12 @@ export function Cell({ cell, x, y }) {
         </div>
     )
 }
+
+Cell.propTypes = {
+    cell: PropTypes.string.isRequired,
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+};
+
 
 
