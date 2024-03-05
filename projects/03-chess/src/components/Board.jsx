@@ -3,21 +3,21 @@ import { useState, useEffect } from 'react';
 export function Board() {
 
     const whiteChessmen = {
-        PAWN : '♙',
-        ROOK : '♖', 
-        KNIGHT : '♘', 
-        BISHOP : '♗', 
-        QUEEN : '♕', 
-        KING: '♔'
+        PAWN :'./w-pawn.svg',
+        ROOK : './w-rook.svg',
+        KNIGHT : './w-knight.svg',
+        BISHOP : './w-bshop.svg',
+        QUEEN : './w-queen.svg',
+        KING :'./w-king.svg',
     }
 
     const blackChessmen = {
-        PAWN : '♟',
-        ROOK : '♜', 
-        KNIGHT : '♞', 
-        BISHOP : '♝', 
-        QUEEN : '♛', 
-        KING: '♚'
+        PAWN : './b-pawn.svg',
+        ROOK : './b-rook.svg', 
+        KNIGHT : './b-knight.svg', 
+        BISHOP : './b-bshop.svg', 
+        QUEEN : './b-queen.svg', 
+        KING: 'b-king.svg'
     }
     
     const[position, setPosition] = useState({x: 0, y: 0})
@@ -89,20 +89,29 @@ export function Board() {
         if(selectedPiece && selectedPiece.cell != null){
             
             if (turn === 'WHITE' && findPieceWhite(selectedPiece.cell)) {
+                console.log('white piece');
+                console.log(findPieceWhite(selectedPiece.cell));
             } else if(turn === 'BLACK' && findPieceBlack(selectedPiece.cell)){
+                console.log('black piece');
+                console.log(findPieceBlack(selectedPiece.cell));
             }
         }
     },[selectedPiece])
 
     return (
-        <>
+        <div className='w-fit mx-auto border-[10px] border-slate-500 m-3 bg-white'>
             {   
                 board.map((column, x) => (
-                    <div key={x} className="grid grid-cols-8 mx-auto ">
+                    <div key={x} className="grid grid-cols-8  ">
                         {column.map((cell, y) => (
                             
-                            <div onClick={() => handleSetSelectedPiece({cell, x, y })} className={`size-[50px] border flex justify-center items-center cursor-pointer ${cell}`} key={`${x},${y}`}>
-                                {cell}
+                            <div onClick={() => handleSetSelectedPiece({cell, x, y })}
+                                className={ (x+y)% 2 === 0 ? 
+                                    'size-[50px] bg-white  border-slate-300 flex justify-center items-center' : 
+                                    'size-[50px] bg-gray-400 border-slate-300 flex justify-center items-center'}
+                                key={`${x},${y}`}>
+                                
+                                {cell && <img className='size-8/12 cursor-pointer  drop-shadow-2xl' src={cell} alt={cell} />}
                             </div> 
                             
                         ))}
@@ -110,6 +119,6 @@ export function Board() {
                 ))
                 
             }
-        </>
+        </div>
     );
 }
